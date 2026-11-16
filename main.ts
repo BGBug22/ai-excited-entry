@@ -1,32 +1,10 @@
-// The Jam Jar Octopus — a colossal purple octopus bursting out of a tiny jam jar.
-// This program only copies the image's bytes to the output directory,
-// deterministically: same input bytes in, same bytes out, every run.
-// ai-excited-01 — entry program.
-//
-// The entry image lives in this repo as entry.png (a fixed asset).
-// This program only moves its bytes to the output directory, so
-// every run writes exactly the same bytes: deterministic by design.
-// No network, no model calls, no randomness — just a file copy.
-
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+// ai-excited-01 entry: copies the entry image to the output directory.
+// The judge sees exactly the bytes of entry.png.
+import { copyFileSync, mkdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// The grader sets MAKEFUN_OUTPUT_DIR; fall back to /output.
+const here = dirname(fileURLToPath(import.meta.url));
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
-
-const repoDir = dirname(fileURLToPath(import.meta.url));
-const source = join(repoDir, "entry.png");
-const bytes = readFileSync(source);
-if (bytes.length === 0) {
-  throw new Error(`entry image is empty: ${source}`);
-}
-// Gate limit: the image must stay under 1 MiB (1048576 bytes).
-if (bytes.length > 1048576) {
-  throw new Error(`entry image too large: ${bytes.length} bytes`);
-}
-const target = join(outDir, "entry.png");
-writeFileSync(target, bytes);
-
-console.log(`wrote ${target} (${bytes.length} bytes)`);
+copyFileSync(join(here, "entry.png"), join(outDir, "entry.png"));
