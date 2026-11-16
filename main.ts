@@ -1,3 +1,6 @@
+// The Jam Jar Octopus — a colossal purple octopus bursting out of a tiny jam jar.
+// This program only copies the image's bytes to the output directory,
+// deterministically: same input bytes in, same bytes out, every run.
 // ai-excited-01 — entry program.
 //
 // The entry image lives in this repo as entry.png (a fixed asset).
